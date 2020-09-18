@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Профіль користувача {{user.userprofile.username}}{% endblock %}
+
+{% block content %}
+<p>Юзернейм: {{user.userprofile.username}}</p>
+<p>Email: {{user.email}}</p>
+<p>Ім'я: {{user.userprofile.first_name}}</p>
+<p>Прізвище: {{user.userprofile.last_name}}</p>
+{% if user.userprofile.image %}
+  <img src="{{ user.userprofile.image.url }}" width="240">
+{% endif %}
+<p><a href="{% url 'profile_edit' %}">Редагувати</a>
+   <a href="{% url 'home' %}">Назад</a></p
+{% endblock %}
