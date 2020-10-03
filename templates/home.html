@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Головна сторінка{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
-  Привіт, {{ user.userprofile.username }}!
-  <a href="{% url 'logout' %}">Вийти</a>
-  <a href="{% url 'profile' %}">Профіль</a>
+<div class="row justify-content-md-center">
+  <div class="col-md-auto"">
+    <p class="h5">Привіт, {{user.userprofile.username}}!</p>
+    <a href="{% url 'logout' %}">Вийти</a>
+    <a href="{% url 'profile' %}">Профіль</a>
+  </div>
+</div>
 {% else %}
-  <p>Ти не зареєстрований</p>
-  <a href="{% url 'login' %}">Увійти</a>
-  <a href="{% url 'signup' %}">Зареєструватись</a>
+<div class="row justify-content-md-center">
+  <div class="col-md-auto"">
+    <p class="h5">Ти не зареєстрований</p>
+    <a href="{% url 'login' %}">Увійти</a>
+    <a href="{% url 'signup' %}">Зареєструватись</a>
+  </div>
+</div>
 {% endif %}
 {% endblock %}
