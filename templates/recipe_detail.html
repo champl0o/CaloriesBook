@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="recipe-entry">
+    <h2>{{ object.title }}</h2>
+    <p>by {{ object.author }} | {{ object.pub_date }}</p>
+    <p>{{ object.body }}</p>
+  </div>
+    <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
+      <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
+    <p>Повернутись до <a href="{% url 'recipe_list' %}">Всіх рецептів</a>.</p>
+{% endblock content %}

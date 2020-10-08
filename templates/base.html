@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Newspaper App{% endblock title %}</title>
+  <title>{% block title %}Книга Калорій{% endblock title %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
@@ -26,6 +26,9 @@
       <li class="nav-item">
         <a class="nav-link" href="#"><h5>Мої рецепти</h5></a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'recipe_list' %}"><h5>Останні рецепти</h5></a>
+      </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">
       <li class="nav=item dropdown">
@@ -33,6 +36,7 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
           <a href="{% url 'profile' %}" class="dropdown-item">Профіль</a>
           <a href="#" class="dropdown-item">Рецепти</a>
+          <a href="{% url 'recipe_new' %}" class="dropdown-item">Додати рецепт</a>
           <div class="dropdown-divider"></div>
           <a href="{% url 'logout' %}" class="dropdown-item">Вийти</a>
         </div>
