@@ -1,15 +1,57 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Профіль користувача {{user.userprofile.username}}{% endblock %}
 
 {% block content %}
-<p>Юзернейм: {{user.userprofile.username}}</p>
-<p>Email: {{user.email}}</p>
-<p>Ім'я: {{user.userprofile.first_name}}</p>
-<p>Прізвище: {{user.userprofile.last_name}}</p>
-{% if user.userprofile.image %}
-  <img src="{{ user.userprofile.image.url }}" width="240">
-{% endif %}
-<p><a href="{% url 'profile_edit' %}">Редагувати</a>
-   <a href="{% url 'home' %}">Назад</a></p
+<h1 class="text-center">Профіль користувача {{user.userprofile.username}}</h1>
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-sm mt-auto ml-auto">
+      {% if user.userprofile.image %}
+        <img class="img-fluid mb-3 rounded-circle" src="{{ user.userprofile.image.url }}" width="260">
+      {% else %}
+        <img src="/media/default-avatar.png" width="240">
+      {% endif %}
+    </div>
+    <form class="col-sm-8 mt-auto">
+      <!-- TEXT FIELD GROUPS -->
+      <div class="form-group row">
+        <label for="name" class="col-sm-2 col-form-label">Нікнейм</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="name" placeholder="{{user.userprofile.username}}" readonly>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-sm-2 col-form-label">Email адреса</label>
+        <div class="col-sm-10">
+          <input class="form-control form-control-lg" type="email" id="email" placeholder="{{user.email}}" readonly>
+          <small class="form-text text-muted">Ваша пошта використовується виключно для входу</small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="password" class="col-sm-2 col-form-label">Пароль</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="password" id="password" placeholder="{{user.userprofile.first_name}}" readonly>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label">Біо</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize:none"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row justify-content-md-center mt-auto">
+    <div class="col col-lg-auto">
+      <p><a href="{% url 'profile_edit' %}"><h6>Редагувати</h6></a></p>
+    </div>
+    <div class="col col-lg-auto">
+      <p><a href="{% url 'home' %}"><h6>Назад</h6></a></p>
+    </div>
+  </div>
+</div>
+</div>
 {% endblock %}
