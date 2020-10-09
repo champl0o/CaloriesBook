@@ -4,7 +4,7 @@
   <div class="recipe-entry">
     <h2>{{ object.title }}</h2>
     <p>by {{ object.author }} | {{ object.pub_date }}</p>
-    <p>{{ object.body }}</p>
+    <p>{{ object.description }}</p>
   </div>
     <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
       <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>

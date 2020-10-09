@@ -5,8 +5,6 @@ from .models import Recipe
 
 from django.urls import reverse_lazy
 
-from django.utils.timezone import now
-
 # Create your views here.
 class RecipeListView(generic.ListView):
     model = Recipe
@@ -19,12 +17,12 @@ class RecipeDetailView(generic.detail.DetailView):
 class RecipeUpdateView(edit.UpdateView):
     model = Recipe
     template_name = 'recipe_edit.html'
-    fields = ('title', 'body',)
+    fields = ('title', 'description',)
 
 class RecipeCreateView(edit.CreateView):
     model = Recipe
     template_name = 'recipe_new.html'
-    fields = ('title', 'body',)
+    fields = ('title', 'description',)
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -34,3 +32,7 @@ class RecipeDeleteView(edit.DeleteView):
     model = Recipe
     template_name = 'recipe_delete.html'
     success_url = reverse_lazy('recipe_list')
+
+class MyRecipeListView(generic.ListView):
+    model = Recipe
+    template_name = 'users_recipe.html'

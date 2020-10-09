@@ -9,7 +9,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=50, verbose_name='Назва рецепту')
     pub_date = models.DateTimeField(default=now, editable=False)
-    body = models.TextField(verbose_name='Опис')
+    description = models.TextField(verbose_name='Опис')
 
     def __str__(self):
         return self.title
