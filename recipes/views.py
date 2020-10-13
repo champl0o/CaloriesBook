@@ -3,23 +3,32 @@ from django.views import generic
 from django.views.generic import edit
 from .models import Recipe
 
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+    )
+
 from django.urls import reverse_lazy
 
 # Create your views here.
-class RecipeListView(generic.ListView):
+class RecipeListView(LoginRequiredMixin, generic.ListView):
     model = Recipe
     template_name = 'recipe_list.html'
 
-class RecipeDetailView(generic.detail.DetailView):
+class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
     model = Recipe
     template_name = 'recipe_detail.html'
 
-class RecipeUpdateView(edit.UpdateView):
+class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView):
     model = Recipe
     template_name = 'recipe_edit.html'
     fields = ('title', 'description',)
 
-class RecipeCreateView(edit.CreateView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class RecipeCreateView(LoginRequiredMixin, edit.CreateView):
     model = Recipe
     template_name = 'recipe_new.html'
     fields = ('title', 'description',)
@@ -28,11 +37,18 @@ class RecipeCreateView(edit.CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class RecipeDeleteView(edit.DeleteView):
+class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, edit.DeleteView):
     model = Recipe
     template_name = 'recipe_delete.html'
     success_url = reverse_lazy('recipe_list')
 
-class MyRecipeListView(generic.ListView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class MyRecipeListView(LoginRequiredMixin, generic.ListView):
     model = Recipe
     template_name = 'users_recipe.html'
+
+    def get_queryset(self):
+        return Recipe.objects.filter(author=self.request.user)

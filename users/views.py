@@ -9,19 +9,21 @@ from .models import UserProfile, CustomUser
 
 from .signals import *
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
-class ProfileView(generic.detail.DetailView):
+class ProfileView(LoginRequiredMixin, generic.detail.DetailView):
     model = UserProfile
     template_name = 'profile.html'
 
     def get_object(self):
         return UserProfile.objects.get(user=self.request.user)
 
-class ProfileUpdate(generic.edit.UpdateView):
+class ProfileUpdate(LoginRequiredMixin, generic.edit.UpdateView):
     model = UserProfile
     fields = ('username', 'first_name', 'last_name', 'image')
     template_name = 'profile_edit.html'
