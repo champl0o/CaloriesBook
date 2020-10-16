@@ -25,8 +25,8 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView)
     fields = ('title', 'description',)
 
     def test_func(self):
-        obj = self.get_object()
-        return obj.author == self.request.user
+        recipe = self.get_object()
+        return recipe.author == self.request.user
 
 class RecipeCreateView(LoginRequiredMixin, edit.CreateView):
     model = Recipe
@@ -43,8 +43,8 @@ class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, edit.DeleteView)
     success_url = reverse_lazy('recipe_list')
 
     def test_func(self):
-        obj = self.get_object()
-        return obj.author == self.request.user
+        recipe = self.get_object()
+        return recipe.author == self.request.user
 
 class MyRecipeListView(LoginRequiredMixin, generic.ListView):
     model = Recipe
