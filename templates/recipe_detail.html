@@ -9,4 +9,14 @@
     <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
       <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
     <p>Повернутись до <a href="{% url 'recipe_list' %}">Всіх рецептів</a>.</p>
+    <br/><br/>
+    <hr>
+    <br/>
+    <form action="{% url 'like_recipe' recipe.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit" name="recipe_id",
+      value="{{ recipe.id }}", class="btn btn-primary
+      btn-sm">Like</button> - {{ total_likes }} Лайків
+
+    </form>
 {% endblock content %}
