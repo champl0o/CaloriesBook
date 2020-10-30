@@ -30,7 +30,6 @@ class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
         customRecipeInstance = get_object_or_404(Recipe, id=self.kwargs['pk'])
         total_likes = customRecipeInstance.total_likes()
         context["total_likes"] = total_likes
-        template_name = 'recipe_detail.html'
         return context
 
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView):

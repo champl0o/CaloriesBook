@@ -6,8 +6,10 @@
     <p>by {{ object.author }} | {{ object.pub_date }}</p>
     <p>{{ object.description }}</p>
   </div>
+  {% if user == recipe.author %}
     <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
       <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
+  {% endif %}
     <p>Повернутись до <a href="{% url 'recipe_list' %}">Всіх рецептів</a>.</p>
     <br/><br/>
     <hr>
@@ -16,7 +18,6 @@
       {% csrf_token %}
       <button type="submit" name="recipe_id",
       value="{{ recipe.id }}", class="btn btn-primary
-      btn-sm">Like</button> - {{ total_likes }} Лайків
-
+      btn">{{ total_likes }} Лайків</button>
     </form>
 {% endblock content %}
