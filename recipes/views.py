@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic import edit
-from .models import Recipe
+from .models import Recipe, Comment
+from .forms import CommentForm
 
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -65,3 +66,14 @@ class MyRecipeListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Recipe.objects.filter(author=self.request.user)
+
+class AddCommentView(edit.CreateView):
+    model = Comment
+    template_name = 'add_comment.html'
+    fields = ('comment',)
+    success_url = reverse_lazy('recipe_list')
+
+    def form_valid(self, form):
+        form.instance.recipe_id = self.kwargs['pk']
+        form.instance.author = self.request.user
+        return super().form_valid(form)

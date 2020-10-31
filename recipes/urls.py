@@ -6,6 +6,7 @@ from .views import (
     RecipeCreateView,
     RecipeDeleteView,
     LikeView,
+    AddCommentView,
 )
 
 urlpatterns = [
@@ -18,5 +19,6 @@ urlpatterns = [
     path('new/',
         RecipeCreateView.as_view(), name='recipe_new'),
     path('like/<int:pk>/', LikeView, name='like_recipe'),
+    path('<int:pk>/comments/', AddCommentView.as_view(), name='add_comment'),
     path('', RecipeListView.as_view(), name='recipe_list')
 ]

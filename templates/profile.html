@@ -8,19 +8,31 @@
 <h1 class="text-center">Профіль користувача {{user.userprofile.username}}</h1>
 <div class="container">
   <div class="row mt-5">
-    <div class="col-sm mt-auto ml-auto">
+    <div class="col-sm mt-auto ml-auto mb-auto">
       {% if user.userprofile.image %}
-        <img class="img-fluid mb-3 rounded-circle" src="{{ user.userprofile.image.url }}" width="260">
+        <img class="img-fluid  mb-4 rounded-circle" src="{{ user.userprofile.image.url }}" height="300">
       {% else %}
         <img src="/media/default-avatar.png" width="240">
       {% endif %}
     </div>
-    <form class="col-sm-8 mt-auto">
+    <form class="col-sm-8 mt-auto mb-auto">
       <!-- TEXT FIELD GROUPS -->
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">Нікнейм</label>
         <div class="col-sm-10">
           <input class="form-control" type="text" id="name" placeholder="{{user.userprofile.username}}" readonly>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="name" class="col-sm-2 col-form-label">Ім'я</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="name" placeholder="{{user.userprofile.first_name}}" readonly>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="name" class="col-sm-2 col-form-label">Прізвище</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" id="name" placeholder="{{user.userprofile.last_name}}" readonly>
         </div>
       </div>
       <div class="form-group row">
@@ -31,15 +43,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="password" class="col-sm-2 col-form-label">Пароль</label>
-        <div class="col-sm-10">
-          <input class="form-control" type="password" id="password" placeholder="{{user.userprofile.first_name}}" readonly>
-        </div>
-      </div>
-      <div class="form-group row">
         <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label">Біо</label>
         <div class="col-sm-10">
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize:none"></textarea>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" style="resize:none" placeholder="{{user.userprofile.bio}}" readonly></textarea>
         </div>
       </div>
     </form>
