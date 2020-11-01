@@ -10,6 +10,10 @@ class Recipe(models.Model):
     title = models.CharField(max_length=50, verbose_name='Назва рецепту')
     pub_date = models.DateTimeField(default=now, editable=False)
     description = models.TextField(verbose_name='Опис')
+    likes = models.ManyToManyField(get_user_model(), related_name='recipe_likes')
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title

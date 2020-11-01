@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic import edit
 from .models import Recipe
@@ -8,7 +8,13 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin
     )
 
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
+
+def LikeView(request, pk):
+    recipe = get_object_or_404(Recipe, id=request.POST.get('recipe_id'))
+    recipe.likes.add(request.user)
+    return HttpResponseRedirect(reverse('recipe_detail', args=[str(pk)]))
 
 # Create your views here.
 class RecipeListView(LoginRequiredMixin, generic.ListView):
@@ -18,6 +24,13 @@ class RecipeListView(LoginRequiredMixin, generic.ListView):
 class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
     model = Recipe
     template_name = 'recipe_detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RecipeDetailView, self).get_context_data()
+        customRecipeInstance = get_object_or_404(Recipe, id=self.kwargs['pk'])
+        total_likes = customRecipeInstance.total_likes()
+        context["total_likes"] = total_likes
+        return context
 
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView):
     model = Recipe

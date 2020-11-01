@@ -8,12 +8,20 @@
     <div class="card-header">
       <span class="font-weight-bold">{{ recipe.title }}</span> &middot;
       <span class="text-muted">by {{ recipe.author }} |
-      {{ recipe.pub_date }}</span>
+      {{ recipe.pub_date }} | {{ recipe.total_likes }} Лайків | <a href="{% url 'recipe_detail' recipe.pk %}">Переглянути детальніше</a></span>
     </div>
     <div class="card-body">
       <p>{{ recipe.description }}</p>
-      <a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
-      <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a>
+      {% if request.user == recipe.author %}
+        <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
+          <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
+      {% endif %}
+      <form action="{% url 'like_recipe' recipe.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" name="recipe_id",
+        value="{{ recipe.id }}", class="btn btn-primary
+        btn">{{ recipe.total_likes }} Лайків</button>
+      </form>
     </div>
   </div>
   {% endfor %}
