@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic import edit
 from .models import Recipe, Comment
-from .forms import CommentForm
 
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -12,7 +11,7 @@ from django.contrib.auth.mixins import (
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
-def LikeView(request, pk):
+def like_view(request, pk):
     recipe = get_object_or_404(Recipe, id=request.POST.get('recipe_id'))
     recipe.likes.add(request.user)
     return HttpResponseRedirect(reverse('recipe_detail', args=[str(pk)]))
@@ -28,8 +27,8 @@ class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(RecipeDetailView, self).get_context_data()
-        customRecipeInstance = get_object_or_404(Recipe, id=self.kwargs['pk'])
-        total_likes = customRecipeInstance.total_likes()
+        recipe = get_object_or_404(Recipe, id=self.kwargs['pk'])
+        total_likes = recipe.total_likes
         context["total_likes"] = total_likes
         return context
 

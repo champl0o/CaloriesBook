@@ -12,6 +12,7 @@ class Recipe(models.Model):
     description = models.TextField(verbose_name='Опис')
     likes = models.ManyToManyField(get_user_model(), related_name='recipe_likes')
 
+    @property
     def total_likes(self):
         return self.likes.count()
 
