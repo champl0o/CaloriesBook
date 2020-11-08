@@ -3,8 +3,11 @@
 {% block title %}Рецепти{% endblock %}
 
 {% block content %}
+<div class="row justify-content-md-center mt-4">
+  <a href="{% url 'recipe_new' %}"><h4>Додати рецепт</h4></a>
+</div>
   {% for recipe in object_list %}
-  <div class="card">
+  <div class="card mt-4 mb-auto">
     <div class="card-header">
       <span class="font-weight-bold">{{ recipe.title }}</span> &middot;
       <span class="text-muted">by {{ recipe.author }} |
@@ -14,6 +17,39 @@
       <p>{{ recipe.description }}</p>
       <a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
       <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a>
+    </div>
+    <div class="card-footer">
+      {% if not recipe.comments.all %}
+        <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
+      {% else %}
+      <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
+      <br><br>
+        {% for comment in recipe.comments.all %}
+        <hr>
+        <div class="row mt-auto">
+          <div class="col-md mt-auto ml-auto mb-auto">
+            {% if user.userprofile.image %}
+              <img class="mb-auto rounded-circle" src="{{ user.userprofile.image.url }}" height="90">
+            {% else %}
+              <img src="/media/default-avatar.png" width="240">
+            {% endif %}
+          </div>
+          <div class="col-md-11 ml-auto mt-auto mb-auto mr-auto">
+            <div class="card">
+              <div class="card-header">
+                <span class="text-muted">{{comment.pub_date}}</span>
+              </div>
+              <div class="card-body">
+                <p>
+                <span class="font-weight-bold">{{ comment.author.userprofile.username }} &middot;</span>
+                {{ comment }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
   {% endfor %}

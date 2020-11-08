@@ -25,7 +25,7 @@ class ProfileView(LoginRequiredMixin, generic.detail.DetailView):
 
 class ProfileUpdate(LoginRequiredMixin, generic.edit.UpdateView):
     model = UserProfile
-    fields = ('username', 'first_name', 'last_name', 'image')
+    fields = ('username', 'first_name', 'last_name', 'image', 'bio',)
     template_name = 'profile_edit.html'
 
     def get_object(self):
