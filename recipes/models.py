@@ -25,7 +25,7 @@ class Recipe(models.Model):
 
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
-    comment = models.CharField(max_length = 200)
+    text = models.CharField(max_length = 200)
     pub_date = models.DateTimeField(default=now, editable=False)
     author = models.ForeignKey(
         get_user_model(),
@@ -33,7 +33,23 @@ class Comment(models.Model):
     )
 
     def __str__(self):
-        return self.comment
+        return self.text
 
-    def get_absolute_url(self):
-        return reverse('recipe_list')
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length = 30)
+    proteins = models.FloatField()
+    fats = models.FloatField()
+    carbohydrates = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+
+class IngredientItem(models.Model):
+    ingredient = models.OneToOneField(Ingredient, on_delete=models.CASCADE)
+    recipes = models.ManyToManyField(Recipe)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.name

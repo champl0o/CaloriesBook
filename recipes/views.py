@@ -69,7 +69,7 @@ class MyRecipeListView(LoginRequiredMixin, generic.ListView):
 class AddCommentView(edit.CreateView):
     model = Comment
     template_name = 'add_comment.html'
-    fields = ('comment',)
+    fields = ('text',)
     success_url = reverse_lazy('recipe_list')
 
     def form_valid(self, form):
