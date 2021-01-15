@@ -12,11 +12,25 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
 from django.db.models import Q
+from django.db.models import Count
 
 def like_view(request, pk):
     recipe = get_object_or_404(Recipe, id=request.POST.get('recipe_id'))
     recipe.likes.add(request.user)
     return HttpResponseRedirect(reverse('recipe_list'))
+
+# here im trying to add search functionality
+def search(request):
+    """implementing searching functionality to add ingredients
+     to recipe in the future"""
+    ingredient_name = request.GET.get('search')
+
+    if ingredient_name:
+        ingredients = Ingredient.objects.filter(Q(name__icontains=ingredient_name))
+    else:
+        ingredients = []
+
+    return render(request, 'search.html', {'ingredients': ingredients})
 
 
 class RecipeListView(LoginRequiredMixin, generic.ListView):
@@ -94,15 +108,11 @@ class AddIngredientDataView(LoginRequiredMixin, edit.CreateView):
     fields = ('name', 'proteins', 'fats', 'carbohydrates')
     success_url = reverse_lazy('recipe_list')
 
-# here im trying to add search functionality
-def search(request):
-    """implementing searching functionality to add ingredients
-     to recipe in the future"""
-    ingredient_name = request.GET.get('search')
 
-    if ingredient_name:
-        ingredients = Ingredient.objects.filter(Q(name__icontains=ingredient_name))
-    else:
-        ingredients = []
+class TopRecipeListView(LoginRequiredMixin, generic.ListView):
+    """View to get queryset of top liked recipes"""
+    model = Recipe
+    template_name = 'top_recipe.html'
 
-    return render(request, 'search.html', {'ingredients': ingredients})
+    def get_queryset(self):
+        return Recipe.objects.annotate(likes_count=Count('likes')).order_by('-likes_count')

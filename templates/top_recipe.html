@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Рецепти{% endblock %}
+
+{% block content %}
+  {% for recipe in object_list %}
+  <div class="card mt-4 mb-auto">
+    <div class="card-header">
+      <span class="font-weight-bold">{{ recipe.title }}</span> &middot;
+      <span class="text-muted">by {{ recipe.author }} |
+      {{ recipe.pub_date }} | {{ recipe.total_likes }} Лайків | <a href="{% url 'recipe_detail' recipe.pk %}">Переглянути детальніше</a></span>
+    </div>
+    <div class="card-body">
+      <p>{{ recipe.description }}</p>
+      {% if request.user == recipe.author %}
+        <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
+          <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
+      {% endif %}
+      <form action="{% url 'like_recipe' recipe.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" name="recipe_id",
+        value="{{ recipe.id }}", class="btn btn-primary
+        btn">{{ recipe.total_likes }} Лайків</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
+      <br><br>
+        {% for comment in recipe.comments.all %}
+        <hr>
+        <div class="row mt-auto">
+          <div class="col-md-1 mt-auto ml-auto mb-auto mr-auto">
+            {% if comment.author.userprofile.image %}
+              <img class="crop mb-auto rounded-circle" src="{{ comment.author.userprofile.image.url }}">
+            {% else %}
+              <img src="/media/default-avatar.png" width="240">
+            {% endif %}
+          </div>
+          <div class="col-md-10 ml-1 mt-auto mb-auto mr-auto">
+            <div class="card">
+              <div class="card-header">
+                <span class="text-muted">{{comment.pub_date}}</span>
+              </div>
+              <div class="card-body">
+                <p>
+                <span class="font-weight-bold">{{ comment.author.userprofile.username }} &middot;</span>
+                {{ comment }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+  <style>
+      .crop{
+          overflow:hidden;
+          width:100px;
+          height:100px;
+          display:block;
+          border-style:solid;
+          border-width:1px;
+      }
+  </style>
+  {% endfor %}
+{% endblock content %}

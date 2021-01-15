@@ -45,7 +45,7 @@ class Recipe(models.Model):
 
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
-    text = models.CharField(max_length = 200)
+    text = models.CharField(max_length=200)
     pub_date = models.DateTimeField(default=now, editable=False)
     author = models.ForeignKey(
         get_user_model(),
