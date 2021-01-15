@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic import edit
-from .models import Recipe, Comment
+from .models import Recipe, Comment, Ingredient
 
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -11,15 +11,18 @@ from django.contrib.auth.mixins import (
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
+from django.db.models import Q
+
 def like_view(request, pk):
     recipe = get_object_or_404(Recipe, id=request.POST.get('recipe_id'))
     recipe.likes.add(request.user)
-    return HttpResponseRedirect(reverse('recipe_detail', args=[str(pk)]))
+    return HttpResponseRedirect(reverse('recipe_list'))
 
-# Create your views here.
+
 class RecipeListView(LoginRequiredMixin, generic.ListView):
     model = Recipe
     template_name = 'recipe_list.html'
+
 
 class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
     model = Recipe
@@ -32,6 +35,7 @@ class RecipeDetailView(LoginRequiredMixin, generic.detail.DetailView):
         context["total_likes"] = total_likes
         return context
 
+
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView):
     model = Recipe
     template_name = 'recipe_edit.html'
@@ -40,6 +44,7 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView)
     def test_func(self):
         recipe = self.get_object()
         return recipe.author == self.request.user
+
 
 class RecipeCreateView(LoginRequiredMixin, edit.CreateView):
     model = Recipe
@@ -50,6 +55,7 @@ class RecipeCreateView(LoginRequiredMixin, edit.CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+
 class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, edit.DeleteView):
     model = Recipe
     template_name = 'recipe_delete.html'
@@ -59,6 +65,7 @@ class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, edit.DeleteView)
         recipe = self.get_object()
         return recipe.author == self.request.user
 
+
 class MyRecipeListView(LoginRequiredMixin, generic.ListView):
     model = Recipe
     template_name = 'users_recipe.html'
@@ -66,13 +73,36 @@ class MyRecipeListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Recipe.objects.filter(author=self.request.user)
 
+
 class AddCommentView(edit.CreateView):
     model = Comment
     template_name = 'add_comment.html'
-    fields = ('comment',)
+    fields = ('text',)
     success_url = reverse_lazy('recipe_list')
 
     def form_valid(self, form):
         form.instance.recipe_id = self.kwargs['pk']
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+# special admin functionality for adding new info to database
+class AddIngredientDataView(LoginRequiredMixin, edit.CreateView):
+    """View for inserting new ingredients to our database"""
+    model = Ingredient
+    template_name = 'add_ingredient.html'
+    fields = ('name', 'proteins', 'fats', 'carbohydrates')
+    success_url = reverse_lazy('recipe_list')
+
+# here im trying to add search functionality
+def search(request):
+    """implementing searching functionality to add ingredients
+     to recipe in the future"""
+    ingredient_name = request.GET.get('search')
+
+    if ingredient_name:
+        ingredients = Ingredient.objects.filter(Q(name__icontains=ingredient_name))
+    else:
+        ingredients = []
+
+    return render(request, 'search.html', {'ingredients': ingredients})

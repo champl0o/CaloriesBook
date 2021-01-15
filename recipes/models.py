@@ -5,8 +5,28 @@ from django.urls import reverse
 
 from django.utils.timezone import now
 
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length=30)
+    proteins = models.FloatField()
+    fats = models.FloatField()
+    carbohydrates = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+
+class IngredientItem(models.Model):
+    ingredient = models.OneToOneField(Ingredient, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
+    ingredients = models.ManyToManyField(IngredientItem)
     title = models.CharField(max_length=50, verbose_name='Назва рецепту')
     pub_date = models.DateTimeField(default=now, editable=False)
     description = models.TextField(verbose_name='Опис')
@@ -25,7 +45,7 @@ class Recipe(models.Model):
 
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
-    comment = models.CharField(max_length = 200)
+    text = models.CharField(max_length = 200)
     pub_date = models.DateTimeField(default=now, editable=False)
     author = models.ForeignKey(
         get_user_model(),
@@ -33,7 +53,4 @@ class Comment(models.Model):
     )
 
     def __str__(self):
-        return self.comment
-
-    def get_absolute_url(self):
-        return reverse('recipe_list')
+        return self.text
