@@ -23,7 +23,7 @@
         <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
       {% else %}
       <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
-      <br><br>
+      <br>
         {% for comment in recipe.comments.all %}
         <hr>
         <div class="row mt-auto">

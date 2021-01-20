@@ -25,13 +25,13 @@
     </div>
     <div class="card-footer">
       <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
-      <br><br>
+      <br>
         {% for comment in recipe.comments.all %}
         <hr>
         <div class="row mt-auto">
           <div class="col-md-1 mt-auto ml-auto mb-auto mr-auto">
             {% if comment.author.userprofile.image %}
-              <img class="mb-auto rounded-circle" src="{{ comment.author.userprofile.image.url }}" height="90">
+              <img class="crop mb-auto rounded-circle" src="{{ comment.author.userprofile.image.url }}" height="90">
             {% else %}
               <img src="/media/default-avatar.png" width="240">
             {% endif %}
@@ -53,5 +53,16 @@
         {% endfor %}
     </div>
   </div>
+
+  <style>
+      .crop{
+          overflow:hidden;
+          width:100px;
+          height:100px;
+          display:block;
+          border-style:solid;
+          border-width:1px;
+      }
+  </style>
   {% endfor %}
 {% endblock content %}

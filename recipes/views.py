@@ -63,7 +63,7 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, edit.UpdateView)
 class RecipeCreateView(LoginRequiredMixin, edit.CreateView):
     model = Recipe
     template_name = 'recipe_new.html'
-    fields = ('title', 'description',)
+    fields = ('title', 'description', 'ingredients',)
 
     def form_valid(self, form):
         form.instance.author = self.request.user

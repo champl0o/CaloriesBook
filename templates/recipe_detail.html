@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="recipe-entry">
-    <h2>{{ object.title }}</h2>
-    <p>by {{ object.author }} | {{ object.pub_date }}</p>
+<div class="container">
+    <h1 class="text-center">{{ object.title }}</h1>
+    <p ><h4 class="text-center">by {{ object.author }} | {{ object.pub_date }}</h4></p>
     <p>{{ object.description }}</p>
-  </div>
   {% if user == recipe.author %}
     <p><a href="{% url 'recipe_edit' recipe.pk %}">Редагувати</a> |
       <a href="{% url 'recipe_delete' recipe.pk %}">Видалити</a></p>
@@ -18,4 +17,6 @@
       value="{{ recipe.id }}", class="btn btn-primary
       btn">{{ total_likes }} Лайків</button>
     </form>
+</div>
+
 {% endblock content %}

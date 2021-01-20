@@ -17,12 +17,12 @@ class Ingredient(models.Model):
 
 
 class IngredientItem(models.Model):
-    ingredient = models.OneToOneField(Ingredient, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient,
+                                   on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
 
     def __str__(self):
-        return self.name
-
+        return self.ingredient.name
 
 class Recipe(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
@@ -35,6 +35,13 @@ class Recipe(models.Model):
     @property
     def total_likes(self):
         return self.likes.count()
+
+    @property
+    def total_weight(self):
+        total = 0.0
+        for ingredient in self.ingredients.all():
+            total += ingredient.quantity
+        return total
 
     def __str__(self):
         return self.title
