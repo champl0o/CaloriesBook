@@ -17,7 +17,7 @@ from django.db.models import Count
 def like_view(request, pk):
     recipe = get_object_or_404(Recipe, id=request.POST.get('recipe_id'))
     recipe.likes.add(request.user)
-    return HttpResponseRedirect(reverse('recipe_list'))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 # here im trying to add search functionality
 def search(request):
