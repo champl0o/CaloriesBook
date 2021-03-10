@@ -21,7 +21,7 @@
         <a class="nav-link" href="{% url 'profile' %}"><h5>Профіль</h5><span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><h5>Топ рецептів</h5></a>
+        <a class="nav-link" href="{% url 'top_recipe' %}"><h5>Топ рецептів</h5></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'users_recipe' %}"><h5>Мої рецепти</h5></a>
@@ -29,6 +29,17 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'recipe_list' %}"><h5>Останні рецепти</h5></a>
       </li>
+
+        <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}">
+          <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search"/>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Знайти</button>
+        </form>
+      {% if request.user.is_superuser %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'add_ingredient' %}"><h5>Додати інгредієнт</h5></a>
+      </li>
+      {% endif %}
+
     </ul>
     <ul class="nav navbar-nav ml-auto">
       <li class="nav=item dropdown">

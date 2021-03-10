@@ -3,15 +3,12 @@
 {% block title %}Рецепти{% endblock %}
 
 {% block content %}
-<div class="row justify-content-md-center mt-4">
-  <a href="{% url 'recipe_new' %}"><h4>Додати рецепт</h4></a>
-</div>
   {% for recipe in object_list %}
   <div class="card mt-4 mb-auto">
     <div class="card-header">
       <span class="font-weight-bold">{{ recipe.title }}</span> &middot;
       <span class="text-muted">by {{ recipe.author }} |
-      {{ recipe.pub_date }}</span>
+      {{ recipe.pub_date }} | {{ recipe.total_likes }} Лайків | <a href="{% url 'recipe_detail' recipe.pk %}">Переглянути детальніше</a></span>
     </div>
     <div class="card-body">
       <p>{{ recipe.description }}</p>
@@ -27,22 +24,19 @@
       </form>
     </div>
     <div class="card-footer">
-      {% if not recipe.comments.all %}
-        <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
-      {% else %}
       <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
       <br>
         {% for comment in recipe.comments.all %}
         <hr>
         <div class="row mt-auto">
-          <div class="col-md-1 mt-auto ml-auto mb-auto">
+          <div class="col-md-1 mt-auto ml-auto mb-auto mr-auto">
             {% if comment.author.userprofile.image %}
-              <img class="mb-auto rounded-circle" src="{{ comment.author.userprofile.image }}" height="90">
+              <img class="crop mb-auto rounded-circle" src="{{ comment.author.userprofile.image.url }}">
             {% else %}
               <img src="/media/default-avatar.png" width="240">
             {% endif %}
           </div>
-          <div class="col-md-10 ml-auto mt-auto mb-auto mr-auto">
+          <div class="col-md-10 ml-1 mt-auto mb-auto mr-auto">
             <div class="card">
               <div class="card-header">
                 <span class="text-muted">{{comment.pub_date}}</span>
@@ -57,8 +51,17 @@
           </div>
         </div>
         {% endfor %}
-      {% endif %}
     </div>
   </div>
+  <style>
+      .crop{
+          overflow:hidden;
+          width:100px;
+          height:100px;
+          display:block;
+          border-style:solid;
+          border-width:1px;
+      }
+  </style>
   {% endfor %}
 {% endblock content %}

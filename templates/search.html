@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if ingredients %}
+{% for ingredient in ingredients %}
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <p><h3>Назва: {{ingredient.name}}</h3></p>
+    </div>
+    <div class="row justify-content-md-center">
+      <p><h4>Білки: {{ingredient.proteins}}|</h4></p>
+      <p><h4>Жири: {{ingredient.fats}}|</h4></p>
+      <p><h4>Вуглеводи: {{ingredient.carbohydrates}}</h4></p>
+    </div>
+  </div>
+{% endfor %}
+{% else %}
+  <p>Ми не знайшли те, що ви шукали {{user.userprofile.username}}.</p>
+  {% for object in ingredient %}
+  <p>{{object.name}}</p>
+  {% endfor %}
+{% endif %}
+
+{% endblock %}

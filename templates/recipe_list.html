@@ -24,22 +24,19 @@
       </form>
     </div>
     <div class="card-footer">
-      {% if not recipe.comments.all %}
-        <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
-      {% else %}
       <a href="{% url 'add_comment' recipe.pk %}">Залишити коментар</a>
-      <br><br>
+      <br>
         {% for comment in recipe.comments.all %}
         <hr>
         <div class="row mt-auto">
-          <div class="col-md mt-auto ml-auto mb-auto">
-            {% if user.userprofile.image %}
-              <img class="mb-auto rounded-circle" src="{{ user.userprofile.image.url }}" height="90">
+          <div class="col-md-1 mt-auto ml-auto mb-auto mr-auto">
+            {% if comment.author.userprofile.image %}
+              <img class="crop mb-auto rounded-circle" src="{{ comment.author.userprofile.image.url }}" height="90">
             {% else %}
               <img src="/media/default-avatar.png" width="240">
             {% endif %}
           </div>
-          <div class="col-md-11 ml-auto mt-auto mb-auto mr-auto">
+          <div class="col-md-10 ml-1 mt-auto mb-auto mr-auto">
             <div class="card">
               <div class="card-header">
                 <span class="text-muted">{{comment.pub_date}}</span>
@@ -54,8 +51,18 @@
           </div>
         </div>
         {% endfor %}
-      {% endif %}
     </div>
   </div>
+
+  <style>
+      .crop{
+          overflow:hidden;
+          width:100px;
+          height:100px;
+          display:block;
+          border-style:solid;
+          border-width:1px;
+      }
+  </style>
   {% endfor %}
 {% endblock content %}
